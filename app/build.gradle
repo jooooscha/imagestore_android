@@ -31,7 +31,10 @@ android {
         jvmTarget = '1.8'
     }
     buildFeatures {
-        viewBinding true
+        compose true
+    }
+    composeOptions {
+        kotlinCompilerExtensionVersion '1.1.1'
     }
 }
 
@@ -48,7 +51,7 @@ dependencies {
     implementation 'com.google.code.gson:gson:2.8.6'
 
 
-    def room_version = "2.3.0"
+    def room_version = "2.4.2"
     implementation("androidx.room:room-runtime:$room_version")
     annotationProcessor "androidx.room:room-compiler:$room_version"
     // To use Kotlin annotation processing tool (kapt)
@@ -63,4 +66,22 @@ dependencies {
     implementation "androidx.room:room-guava:$room_version"
 
     implementation 'com.google.android.flexbox:flexbox:3.0.0'
+
+    // Integration with activities
+    implementation 'androidx.activity:activity-compose:1.5.0'
+    // Compose Material Design
+    implementation 'androidx.compose.material:material:1.1.1'
+    // Animations
+    implementation 'androidx.compose.animation:animation:1.1.1'
+    // Tooling support (Previews, etc.)
+    implementation 'androidx.compose.ui:ui-tooling:1.1.1'
+    // Integration with ViewModels
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.5.0'
+    // UI Tests
+    androidTestImplementation 'androidx.compose.ui:ui-test-junit4:1.1.1'
+
+    //def paging_version = "3.1.1"
+    //implementation("androidx.paging:paging-runtime-ktx:$paging_version")
+    //implementation("androidx.paging:paging-compose:1.0.0-alpha15")
+
 }

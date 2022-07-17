@@ -1,16 +1,39 @@
 package com.joooooscha.imagestore
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
+import androidx.compose.runtime.MutableState
+import androidx.compose.runtime.mutableStateListOf
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.toMutableStateList
+import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
-import java.util.*
-import kotlin.collections.ArrayList
+import com.joooooscha.imagestore.db.ImageMeta
+import androidx.compose.runtime.getValue
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.flow.asStateFlow
 
-object ImageViewModel: ViewModel() {
+class ImageViewModel: ViewModel() {
 
+    private val imageList = initList().toMutableStateList()
+
+    val images: List<Image>
+        get() = imageList
+
+    fun updateMetaAt(i: Int, meta: ImageMeta) {
+        this.imageList[i].updateMeta(meta)
+    }
+
+    fun updateBitmapAt(i: Int, bitmap: ImageBitmap) {
+        this.imageList[i].updateBitmap(bitmap)
+    }
+
+    private fun initList() = List(10) { i -> Image(i) }
+}
+
+/*
 //    var lastChangedPos: MutableList<Int> = mutableListOf()
     var lastChangedPos: Queue<Int> = LinkedList()
+    var images_list by mutableStateOf(0)
 
     private val images: MutableLiveData<ArrayList<Image>> by lazy {
         MutableLiveData<ArrayList<Image>>()
@@ -60,6 +83,6 @@ object ImageViewModel: ViewModel() {
         imgList.sortBy { image -> image.dbImage.date } // first key
         imgList.reverse()
         images.postValue(imgList)
-    }
+    }*/
 
-}
+//}

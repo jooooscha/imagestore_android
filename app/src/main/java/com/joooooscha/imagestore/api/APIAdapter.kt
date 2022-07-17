@@ -10,14 +10,15 @@ import org.json.JSONArray
 import java.net.HttpURLConnection
 import java.net.URL
 
-class APIAdapter {
+object APIAdapter {
 
-//    private val baseUrl = "http://192.168.178.40:3000/api/" //TODO
-    private val baseUrl = "http://10.109.150.7:3000/api/" //TODO
+    private const val baseUrl = "http://192.168.178.40:3000/api/" //TODO
+//    private val baseUrl = "http://10.109.150.7:3000/api/" //TODO
 //    private val baseUrl = "http://duckduckgo.com"
 
-    suspend fun fetch(): JSONArray {
+    suspend fun fetchMeta(): JSONArray {
 //        val url = URL("${baseUrl}media/search/house")
+        Log.d("api", "fetching all media")
         val url = URL("${baseUrl}media/all")
         val con = url.openConnection() as HttpURLConnection
         return withContext(Dispatchers.IO) {
@@ -45,12 +46,12 @@ class APIAdapter {
         }
     }
 
-    suspend fun getImage(id: Int): Bitmap {
+    fun getImage(id: Int): Bitmap {
         val url = URL("${baseUrl}media/$id")
         return downloadHelper(url)
     }
 
-    suspend fun getThumb(id: Int): Bitmap {
+    fun getThumb(id: Int): Bitmap {
         val url = URL("${baseUrl}media/thumb_$id")
 //        Thread.sleep(1000)
         return downloadHelper(url)

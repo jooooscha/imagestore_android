@@ -34,7 +34,7 @@ class GalleryViewAdapter(
     }
 
     fun setList(list: ArrayList<Image>) {
-        images = list
+        /*images = list
         val size = ImageViewModel.lastChangedPos.size
         for (i in 0 until size) {
             val pos = ImageViewModel.lastChangedPos.element()
@@ -44,7 +44,7 @@ class GalleryViewAdapter(
                 notifyItemChanged(pos)
             }
             ImageViewModel.lastChangedPos.remove()
-        }
+        }*/
     }
 
     class ViewHolder(view: View): RecyclerView.ViewHolder(view) {
@@ -59,7 +59,7 @@ class GalleryViewAdapter(
 
     override fun onBindViewHolder(viewHolder: ViewHolder, position: Int) {
 //        viewHolder.imageView.setImageBitmap(images[position].bitmap)
-        val image = ImageViewModel.getImages().value!![position]
+        /*val image = ImageViewModel.getImages().value!![position]
 
 //        val bitmap = if (image.state == ImageState.PRE_IMG) {
 ////            image.bitmap
@@ -68,7 +68,7 @@ class GalleryViewAdapter(
 //        }
         val bitmap = Storage.readImage(image.dbImage.id, context)
 
-        viewHolder.imageView.setImageBitmap(bitmap)
+        viewHolder.imageView.setImageBitmap(bitmap)*/
     }
 
     override fun getItemCount() = images.size

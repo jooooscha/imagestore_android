@@ -3,7 +3,7 @@ package com.joooooscha.imagestore.db
 import androidx.room.Database
 import androidx.room.RoomDatabase
 
-@Database(entities = [ImageDB::class], version = 1)
+@Database(entities = [ImageMeta::class], version = 1)
 abstract class ImageDatabase: RoomDatabase() {
     abstract fun imageDao(): ImageDao
 }
