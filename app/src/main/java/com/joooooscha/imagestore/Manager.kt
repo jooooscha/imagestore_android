@@ -7,7 +7,6 @@ import androidx.compose.ui.graphics.asImageBitmap
 import com.joooooscha.imagestore.api.APIAdapter
 import com.joooooscha.imagestore.db.DBHandler
 import com.joooooscha.imagestore.db.ImageMeta
-import com.joooooscha.imagestore.db.ImageDao
 import com.joooooscha.imagestore.storage.Storage
 import org.json.JSONObject
 
@@ -43,23 +42,39 @@ class Manager(private val viewModel: ImageViewModel, context: Context) {
     suspend fun loadImageThumbnailRange(from: Int, to: Int) {
         val ids = this.imageDao.getIdRange(from, to)
         ids.forEachIndexed { i, id ->
-
-            this.storage.readImage(id)?.let { bitmap -> // bitmap known, read from storage
-                viewModel.updateBitmapAt(i, bitmap.asImageBitmap())
-            } ?: run { // bitmap unknown, load from server
-                val bitmap = APIAdapter.getThumb(id)
-                viewModel.updateBitmapAt(i, bitmap.asImageBitmap())
-                this.storage.writeImage(id, bitmap)
-            }
-
+            val bitmap = getImageThumbnail(id)
+            viewModel.updateBitmapAt(i, bitmap.asImageBitmap())
         }
     }
 
+    // return thumbnail either loading from storage or server
+    private fun getImageThumbnail(id: Int): Bitmap {
+        return this.storage.readImage(id) ?: run {
+            val bitmap = APIAdapter.getThumb(id)
+            this.storage.writeImage(id, bitmap)
+            bitmap
+        }
+            /*this.storage.readImage(id)?.let { bitmap -> // bitmap known, read from storage
+                viewModel.updateBitmapAt(i, bitmap.asImageBitmap())
+            } ?: run { // bitmap unknown, load from server
+                val bitmap = APIAdapter.getThumb(id)
+
+            }*/
+    }
+
     // load image meta data from range
-    suspend fun loadImageRange(from: Int, to: Int) {
+    suspend fun loadMetaRange(from: Int, to: Int) {
         val imageListMeta = this.imageDao.getRange(from, to)
         // val imageListMeta = this.imageDao.getAll()
         Log.d("manager", "got meta from db")
+        imageListMeta.forEachIndexed { i, image ->
+            viewModel.updateMetaAt(i, image)
+        }
+    }
+
+    // load image all meta
+    suspend fun loadMeta() {
+        val imageListMeta = this.imageDao.getAllMeta()
         imageListMeta.forEachIndexed { i, image ->
             viewModel.updateMetaAt(i, image)
         }
@@ -113,6 +128,4 @@ class Manager(private val viewModel: ImageViewModel, context: Context) {
         return ImageMeta(imageId, imageName, imageHeight, imageWidth, imageDate, imageType, imageCoordx, imageCoordy)
 
     }
-
-
 }

@@ -4,14 +4,13 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import com.joooooscha.imagestore.ui.Ui.ImageList
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.setValue
-import androidx.compose.runtime.mutableStateOf
 
 class MainActivity : AppCompatActivity() {
 
@@ -21,19 +20,24 @@ class MainActivity : AppCompatActivity() {
         val viewModel = ImageViewModel()
 
         setContent {
-            ImageList(viewModel = viewModel)
+            val model by remember { mutableStateOf(viewModel)}
+            ImageList(viewModel = model)
         }
 
         val manager = Manager(viewModel, applicationContext)
 
+        val from = 0
+        val to = 1000
+
         // load in default thread
         @Suppress("DeferredResultUnused")
         CoroutineScope(Dispatchers.Default).async {
-            manager.loadImageRange(0, 10)
+            manager.loadMeta()
+            manager.loadImageThumbnailRange(from, to)
             manager.syncMeta()
             Log.d("main", "sync complete")
-            manager.loadImageRange(0, 10)
-            manager.loadImageThumbnailRange(0, 10)
+            manager.loadMeta()
+            manager.loadImageThumbnailRange(from, to)
             Log.d("main", "Loading complete")
         }
 

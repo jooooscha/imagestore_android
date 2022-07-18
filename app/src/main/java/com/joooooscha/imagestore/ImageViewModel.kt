@@ -1,33 +1,32 @@
 package com.joooooscha.imagestore
 
-import androidx.compose.runtime.MutableState
-import androidx.compose.runtime.mutableStateListOf
-import androidx.compose.runtime.mutableStateOf
+import android.util.Log
 import androidx.compose.runtime.toMutableStateList
 import androidx.compose.ui.graphics.ImageBitmap
 import androidx.lifecycle.ViewModel
 import com.joooooscha.imagestore.db.ImageMeta
-import androidx.compose.runtime.getValue
-import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.StateFlow
-import kotlinx.coroutines.flow.asStateFlow
 
 class ImageViewModel: ViewModel() {
 
-    private val imageList = initList().toMutableStateList()
+    private val imageList = MutableList(1) { i -> Image(i) }
 
     val images: List<Image>
         get() = imageList
 
     fun updateMetaAt(i: Int, meta: ImageMeta) {
+        while (i >= this.imageList.size) {
+            this.imageList.add(Image(i))
+        }
         this.imageList[i].updateMeta(meta)
     }
 
     fun updateBitmapAt(i: Int, bitmap: ImageBitmap) {
+        while (i >= this.imageList.size) {
+            this.imageList.add(Image(i))
+        }
         this.imageList[i].updateBitmap(bitmap)
     }
 
-    private fun initList() = List(10) { i -> Image(i) }
 }
 
 /*

@@ -7,12 +7,12 @@ import androidx.room.Query
 interface ImageDao {
 
     @Query("SELECT * FROM ImageMeta ORDER BY date")
-    suspend fun getAll(): List<ImageMeta>
+    suspend fun getAllMeta(): List<ImageMeta>
 
     @Query("SELECT * FROM ImageMeta ORDER BY date DESC LIMIT :to - :from OFFSET :to")
     suspend fun getRange(from: Int, to: Int): List<ImageMeta>
 
-    @Query("SELECT id FROM ImageMeta ORDER BY date DESC LIMIT :to - :from OFFSET :to")
+    @Query("SELECT id FROM ImageMeta ORDER BY date DESC LIMIT :to - :from OFFSET :from")
     suspend fun getIdRange(from: Int, to: Int): List<Int>
 
     @Query("SELECT name FROM ImageMeta")
